@@ -1,4 +1,4 @@
-import { Button, CircularProgress, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { ReactFlowProvider } from '@xyflow/react';
 import './App.css';
@@ -34,9 +34,17 @@ function App() {
   });
 
   return (
-    <Stack component='main' width='100%' sx={{ p: 2 }}>
-      <Stack direction='row' width='100%' height='100%'>
-        {isPending || isLoading ? (
+    <Stack
+      component='main'
+      width='100%'
+      sx={{
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%',
+        minHeight: '90vh',
+      }}>
+      {/* <Stack direction='row' width='100%' height='100%'> */}
+      {/* {isPending || isLoading ? (
           'Loading'
         ) : (
           <Stack>
@@ -63,11 +71,12 @@ function App() {
               </Button>
             </div>
           </Stack>
-        )}
-        <ReactFlowProvider>
-          <Canvas />
-        </ReactFlowProvider>
-      </Stack>
+        )} */}
+      <ReactFlowProvider>
+        <Canvas />
+      </ReactFlowProvider>
+      {/* <Editor /> */}
+      {/* </Stack> */}
     </Stack>
   );
 }

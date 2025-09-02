@@ -1,4 +1,4 @@
-import type { Node } from '@xyflow/react';
+import type { Edge, Node } from '@xyflow/react';
 
 // Process Node
 export type ProcessNodeProps = {
@@ -21,4 +21,20 @@ export type ConditionalNodeProps = {
 
 export type ConditionalNode = Node<ConditionalNodeProps, 'conditionalNode'>;
 
-export type NodeType = ProcessNode | GhostNode | ConditionalNode;
+export type ParentLoopNodeProps = {
+  label: string;
+};
+
+export type ParentLoopNode = Node<ParentLoopNodeProps, 'parentLoopNode'>;
+
+export type NodeType =
+  | ProcessNode
+  | GhostNode
+  | ConditionalNode
+  | ParentLoopNode;
+
+export type CustomEdgeProps = {
+  edgeType: 'true' | 'false' | 'regular';
+  edgeLabel: string;
+};
+export type CustomEdgeType = Edge<CustomEdgeProps, 'customEdge'>;

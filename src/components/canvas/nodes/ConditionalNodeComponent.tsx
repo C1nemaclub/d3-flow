@@ -1,48 +1,113 @@
 import { Divider, IconButton, Stack } from '@mui/material';
-import { IconTrash } from '@tabler/icons-react';
-import { Handle, NodeToolbar, Position, type NodeProps } from '@xyflow/react';
+import { IconPlug, IconTrash } from '@tabler/icons-react';
+import {
+  getConnectedEdges,
+  Handle,
+  NodeToolbar,
+  Position,
+  useReactFlow,
+  useStore,
+  type Edge,
+  type Node,
+  type NodeProps,
+} from '@xyflow/react';
 import type { ProcessNode } from '../types/nodes.types';
-import InsertNodeButton from './components/InsertNodeButton';
 
 const ConditionalNodeComponent = (props: NodeProps<ProcessNode>) => {
+  const scaleFactor = useStore((state) => state.transform[2]);
+  const rf = useReactFlow();
+
+  const createGhostOnEmptySource = () => {
+    const int = rf.getInternalNode(props.id);
+    const node = rf.getNode(props.id);
+    if (!node) return;
+    const connectedEdgesSourceHandles = getConnectedEdges([node], rf.getEdges())
+      .map((edge) => {
+        return edge.sourceHandle ?? null;
+      })
+      .filter((item) => Boolean(item));
+    const sourceHandles = int?.internals.handleBounds?.source;
+    const emptySourceHandles = sourceHandles?.filter((handle) => {
+      if (!connectedEdgesSourceHandles.includes(handle.id ?? '')) return true;
+      return false;
+    });
+
+    console.log(emptySourceHandles, 'emt');
+
+    const nodes: Node[] = [];
+    const edges: Edge[] = [];
+
+    emptySourceHandles?.forEach((item) => {
+      const newNode: ProcessNode = {
+        type: 'processNode',
+        data: {
+          label: 'From Empty handle',
+        },
+        position: node.position,
+        id: crypto.randomUUID(),
+      };
+      const connectingEdge: Edge = {
+        type: 'customEdge',
+        id: `${node.id}>${newNode.id}`,
+        source: node.id,
+        target: newNode.id,
+        ...(item.id ? { sourceHandle: item.id } : {}),
+      };
+      nodes.push(newNode);
+      edges.push(connectingEdge);
+    });
+    rf.addNodes(nodes);
+    rf.addEdges(edges);
+  };
+
   return (
     <>
       <Stack
-        sx={{
-          width: 300,
-          border: '1px solid #363636',
-          borderRadius: 2,
-          ':hover': {
-            border: '1px solid dodgerblue',
-          },
-          pb: 2,
-        }}>
+        sx={
+          {
+            // width: props.width,
+            // border: '1px solid #363636',
+            // borderRadius: 2,
+            // ':hover': {
+            //   border: '1px solid dodgerblue',
+            // },
+            // pb: 2,
+            // alignItems: 'center',
+          }
+        }>
         <Stack sx={{ px: 1, pt: 1, pb: 0.5 }} alignItems='start'>
-          Process Node
+          Process Node {props.id} {props.width}
+          {/* <pre>{JSON.stringify({ d: props.data._debug }, null, 2)}</pre> */}
         </Stack>
         <Divider />
         <Stack sx={{ p: 1 }}>{props.data.label}</Stack>
+        <IconButton sx={{ p: 1 }} onClick={createGhostOnEmptySource}>
+          <IconPlug />
+        </IconButton>
       </Stack>
-      <NodeToolbar isVisible position={Position.Top} align='end'>
-        <IconButton>
+      <NodeToolbar
+        isVisible
+        position={Position.Top}
+        align='end'
+        nodeId={props.id}>
+        <IconButton
+          sx={{
+            scale: scaleFactor,
+          }}>
           <IconTrash size={25} />
         </IconButton>
       </NodeToolbar>
-      <Handle
+      {/* <Handle
+        id='source'
         type='source'
         position={Position.Bottom}
         style={{
           left: '50%',
           width: 10,
           height: 10,
-          background: 'blue',
+          background: 'red',
         }}
-      />
-      <InsertNodeButton
-        onClick={() => {
-          console.log('inserting');
-        }}
-      />
+      /> */}
       <Handle
         id='false'
         type='source'
@@ -51,7 +116,7 @@ const ConditionalNodeComponent = (props: NodeProps<ProcessNode>) => {
           top: '50%',
           width: 10,
           height: 10,
-          background: 'red',
+          background: 'blue',
         }}
       />
       <Handle
@@ -62,10 +127,11 @@ const ConditionalNodeComponent = (props: NodeProps<ProcessNode>) => {
           top: '50%',
           width: 10,
           height: 10,
-          background: 'green',
+          background: 'blue',
         }}
       />
       <Handle
+        id='target'
         type='target'
         position={Position.Top}
         style={{

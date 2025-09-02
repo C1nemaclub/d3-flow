@@ -16,7 +16,7 @@ export const getLayoutedElements = ({
 
   const nodeSize = 100;
   const horizontalSpacing = 310;
-  const verticalSpacing = 200;
+  const verticalSpacing = 300;
 
   // Map of edges by source node
   const outgoingEdgesMap: Record<string, Edge[]> = {};
@@ -26,6 +26,8 @@ export const getLayoutedElements = ({
     }
     outgoingEdgesMap[edge.source].push(edge);
   });
+
+  console.log(outgoingEdgesMap);
 
   // Create map of node ID to mutable node
   const nodeMap = new Map(
