@@ -9,8 +9,13 @@ export const nodeTypes = {
   ghostNode: GhostNodeComponent,
   conditionalNode: ConditionalNodeComponent,
   parentLoopNode: ParentLoopComponent,
-};
+} as const;
 
 export const edgeTypes = {
   customEdge: CustomEdge,
+} as const;
+
+export const NODE_HANDLE_DEFINITION = {
+  processNode: ['target', 'source'],
+  conditionalNode: ['target', 'source', 'true', 'false'],
 };
