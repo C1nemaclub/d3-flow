@@ -25,7 +25,11 @@ const DynamicForm = () => {
   };
 
   const getActionProps = (action, path) => {
-    return get(action, path.split('.').join('.dataTypes.0.keys.'));
+    const result = get(action, path.split('.').join('.dataTypes.0.keys.'));
+    if (!result) {
+      console.log('Si me viste F ❌❌❌❌');
+    }
+    return result;
   };
 
   const renderField = ({
@@ -40,11 +44,15 @@ const DynamicForm = () => {
 
     if (!formProps) {
       console.log(formPath);
-      console.log(formProps);
+      console.log(values);
+      console.log('Si me viste F 👽👽👽👽');
       return `No formProps found Path: ${formProps}`;
     }
     if (!actionProps) {
-      console.log(actionPath);
+      // console.log(inputs);
+      // console.log(actionPath);
+      // console.log(actionProps);
+      console.log('Si me viste F 👻👻👻👻');
       return `No actionProps found Path: ${actionPath}`;
     }
 
@@ -103,7 +111,8 @@ const DynamicForm = () => {
           </FieldWrapper>
         );
       case 'json': {
-        const nestedProps = get(values, `${formPath}.value`);
+        const firstDt = actionProps.dataTypes[0].keys;
+        const nestedInputs = inputsToForm(firstDt);
         return (
           <Stack component='fieldset'>
             <Stack
@@ -129,17 +138,18 @@ const DynamicForm = () => {
               actionPath={actionPath}
               renderField={({ index }) => {
                 {
-                  return Object.keys(nestedProps).map((key) => {
+                  return Object.keys(nestedInputs).map((key) => {
                     const itemPath = `${formPath}.value.${key}`;
                     return (
                       <Fragment key={itemPath}>
                         {/* {String(`${formPath}.value.${index}`)} */}
+                        {/* <pre>{JSON.stringify({ key }, null, 2)}</pre> */}
                         {renderField({
-                          formPath: itemPath,
-                          // formPath:
-                          //   index !== undefined
-                          //     ? `${formPath}.value.${index}.${key}`
-                          //     : `${formPath}.value.${key}`,
+                          // formPath: itemPath,
+                          formPath:
+                            index !== undefined
+                              ? `${formPath}.value.${index}.value.${key}`
+                              : `${formPath}.value.${key}`,
                           actionPath: `${actionPath}.${key}`,
                         })}
                       </Fragment>

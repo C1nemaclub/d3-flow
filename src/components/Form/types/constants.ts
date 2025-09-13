@@ -1,26 +1,26 @@
 export const inputs = {
-  // age: {
-  //   label: 'Age',
-  //   origin: { fixed: true, output: true },
-  //   required: true,
-  //   dataTypes: [
-  //     {
-  //       isList: false,
-  //       type: 'text',
-  //     },
-  //   ],
-  // },
-  // emails: {
-  //   label: 'List Of Emails',
-  //   origin: { fixed: true, output: true, variable: true },
-  //   required: true,
-  //   dataTypes: [
-  //     {
-  //       isList: true,
-  //       type: 'text',
-  //     },
-  //   ],
-  // },
+  age: {
+    label: 'Age',
+    origin: { fixed: true, output: true },
+    required: true,
+    dataTypes: [
+      {
+        isList: false,
+        type: 'text',
+      },
+    ],
+  },
+  emails: {
+    label: 'List Of Emails',
+    origin: { fixed: true, output: true, variable: true },
+    required: true,
+    dataTypes: [
+      {
+        isList: true,
+        type: 'text',
+      },
+    ],
+  },
   address: {
     label: 'User Data',
     origin: { fixed: true, output: true, variable: true },

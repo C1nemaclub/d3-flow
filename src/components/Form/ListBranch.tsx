@@ -20,14 +20,16 @@ const ListBranch = ({ actionProps, formPath, renderField, actionPath }) => {
 
   const appendItem = () => {
     const firstDt = actionProps.dataTypes[0].keys;
-    const nestedInputs = inputsToForm(firstDt);
-    if (firstDt && nestedInputs) {
-      append({
-        id: crypto.randomUUID(),
-        value: nestedInputs,
-        origin: 'fixed',
-      });
-      return;
+    if (firstDt) {
+      const nestedInputs = inputsToForm(firstDt);
+      if (nestedInputs) {
+        append({
+          id: crypto.randomUUID(),
+          value: nestedInputs,
+          origin: 'fixed',
+        });
+        return;
+      }
     }
     append({ id: crypto.randomUUID(), value: '', origin: 'fixed' });
   };
