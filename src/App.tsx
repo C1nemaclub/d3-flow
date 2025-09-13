@@ -45,6 +45,20 @@ function App() {
         minHeight: '90vh',
       }}>
       <DynamicForm />
+      {/* <CustomPopover>
+        <PopoverTrigger asChild>
+          <Button variant='contained' size='small'>
+            Hello World
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent component='menu'>
+          <Box>
+            <MenuItem>Item1</MenuItem>
+            <MenuItem>Item1</MenuItem>
+            <MenuItem>Item1</MenuItem>
+          </Box>
+        </PopoverContent>
+      </CustomPopover> */}
       {/* <Stack direction='row' width='100%' height='100%'> */}
       {/* {isPending || isLoading ? (
           'Loading'
@@ -88,8 +102,8 @@ function App() {
             );
           }}
         </Content>
-      </CoolModal>
-      <DropApp /> */}
+      </CoolModal> */}
+      {/* <DropApp /> */}
       {/* <CompoundMenu>
         <Trigger>
           <Button>Menu</Button>
