@@ -1,4 +1,5 @@
 import { Button, Stack, TextField, Typography } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { FormProvider, get, useForm } from 'react-hook-form';
 import { Fragment } from 'react/jsx-runtime';
 import AdaptableField from './AdaptableField';
@@ -104,6 +105,41 @@ const DynamicForm = () => {
                     onChange={(v) => onChange(v.target.value)}
                     fullWidth
                     size='small'
+                  />
+                );
+              }}
+            />
+          </FieldWrapper>
+        );
+      case 'date':
+        return (
+          <FieldWrapper
+            label={actionProps.label}
+            endAdornment={
+              <OriginSelector
+                value={formProps.origin}
+                origin={actionProps.origin}
+                onNewOrigin={(newOrigin) =>
+                  handleNewOrigin(newOrigin, formPath)
+                }
+              />
+            }>
+            <FieldBranch
+              actionPath={actionPath}
+              activeType={activeType}
+              formPath={formPath}
+              actionProps={actionProps}
+              renderField={({ value, onChange }) => {
+                return (
+                  <DatePicker
+                    value={value}
+                    onChange={(newValue) => onChange(newValue)}
+                    slotProps={{
+                      textField: {
+                        fullWidth: true,
+                        size: 'small',
+                      },
+                    }}
                   />
                 );
               }}

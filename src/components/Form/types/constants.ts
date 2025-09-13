@@ -1,61 +1,107 @@
 export const inputs = {
-  age: {
-    label: 'Age',
-    origin: { fixed: true, output: true },
-    required: true,
-    dataTypes: [
-      {
-        isList: false,
-        type: 'text',
-      },
-    ],
-  },
-  emails: {
-    label: 'List Of Emails',
-    origin: { fixed: true, output: true, variable: true },
+  // age: {
+  //   label: 'Age',
+  //   origin: { fixed: true, output: true },
+  //   required: true,
+  //   dataTypes: [
+  //     {
+  //       isList: false,
+  //       type: 'text',
+  //     },
+  //   ],
+  // },
+  // emails: {
+  //   label: 'List Of Emails',
+  //   origin: { fixed: true, output: false, variable: true },
+  //   required: true,
+  //   dataTypes: [
+  //     {
+  //       isList: true,
+  //       type: 'text',
+  //     },
+  //   ],
+  // },
+  schedule: {
+    label: 'A Date',
+    origin: { fixed: true, output: false, variable: true },
     required: true,
     dataTypes: [
       {
         isList: true,
-        type: 'text',
+        type: 'date',
       },
     ],
   },
-  address: {
-    label: 'User Data',
-    origin: { fixed: true, output: true, variable: true },
-    required: true,
-    dataTypes: [
-      {
-        isList: true,
-        type: 'json',
-        keys: {
-          first_name: {
-            label: 'First Name',
-            origin: { fixed: true, output: true, variable: true },
-            required: true,
-            dataTypes: [
-              {
-                type: 'text',
-                isList: false,
-              },
-            ],
-          },
-          role: {
-            label: 'Role',
-            origin: { fixed: true, output: true, variable: true },
-            required: true,
-            dataTypes: [
-              {
-                type: 'text',
-                isList: false,
-              },
-            ],
-          },
-        },
-      },
-    ],
-  },
+  // user_data: {
+  //   label: 'User Data',
+  //   origin: { fixed: true, output: true, variable: true },
+  //   required: true,
+  //   dataTypes: [
+  //     {
+  //       isList: false,
+  //       type: 'json',
+  //       keys: {
+  //         first_name: {
+  //           label: 'First Name',
+  //           origin: { fixed: true, output: true, variable: true },
+  //           required: true,
+  //           dataTypes: [
+  //             {
+  //               type: 'text',
+  //               isList: false,
+  //             },
+  //           ],
+  //         },
+  //         role: {
+  //           label: 'Role',
+  //           origin: { fixed: true, output: true, variable: true },
+  //           required: true,
+  //           dataTypes: [
+  //             {
+  //               type: 'text',
+  //               isList: false,
+  //             },
+  //           ],
+  //         },
+  //         address: {
+  //           label: 'Address',
+  //           origin: { fixed: true, output: true, variable: true },
+  //           required: true,
+  //           dataTypes: [
+  //             {
+  //               isList: false,
+  //               type: 'json',
+  //               keys: {
+  //                 primary: {
+  //                   label: 'Primary',
+  //                   origin: { fixed: true, output: true, variable: true },
+  //                   required: true,
+  //                   dataTypes: [
+  //                     {
+  //                       type: 'text',
+  //                       isList: false,
+  //                     },
+  //                   ],
+  //                 },
+  //                 secondary: {
+  //                   label: 'Secondary',
+  //                   origin: { fixed: true, output: true, variable: true },
+  //                   required: true,
+  //                   dataTypes: [
+  //                     {
+  //                       type: 'text',
+  //                       isList: false,
+  //                     },
+  //                   ],
+  //                 },
+  //               },
+  //             },
+  //           ],
+  //         },
+  //       },
+  //     },
+  //   ],
+  // },
 };
 
 export const getInitialDatatype = (params) => {
@@ -78,6 +124,12 @@ export const getInitialProps = (props) => {
         value: isList ? [] : null,
         origin: 'fixed',
         type: 'integer',
+      };
+    case 'date':
+      return {
+        value: isList ? [] : null,
+        origin: 'fixed',
+        type: 'date',
       };
     case 'json': {
       return {

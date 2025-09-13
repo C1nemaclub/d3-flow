@@ -31,7 +31,7 @@ const ListBranch = ({ actionProps, formPath, renderField, actionPath }) => {
         return;
       }
     }
-    append({ id: crypto.randomUUID(), value: '', origin: 'fixed' });
+    append({ id: crypto.randomUUID(), value: null, origin: 'fixed' });
   };
 
   // const handleNewOrigin = (newOrigin, formPath) => {
@@ -79,7 +79,6 @@ const ListBranch = ({ actionProps, formPath, renderField, actionPath }) => {
                       index: index,
                     })
                   )}
-
                   <OriginSelector
                     value={formProps.origin}
                     origin={actionProps.origin}

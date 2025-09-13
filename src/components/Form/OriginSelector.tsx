@@ -1,7 +1,11 @@
 import { Autocomplete, Stack, TextField } from '@mui/material';
 
 const OriginSelector = ({ origin, value, onNewOrigin }) => {
-  const origins = Object.keys(origin);
+  const origins = Object.entries(origin)
+    .filter(([, value]) => value === true)
+    .map(([name]) => name);
+
+  if (origins.length <= 1) return null;
 
   return (
     <Stack
