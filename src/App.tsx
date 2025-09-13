@@ -1,9 +1,6 @@
 import { Stack } from '@mui/material';
-import { ReactFlowProvider } from '@xyflow/react';
 import './App.css';
-import Canvas from './components/canvas/Canvas';
-import DropApp from './components/drop/DropApp';
-import LoaderWrapper from './components/LoaderWrapper';
+import DynamicForm from './components/Form/DynamicForm';
 
 function App() {
   // const { isPending, isLoading, error, data } = useQuery<User[]>({
@@ -32,6 +29,11 @@ function App() {
   //   },
   // });
 
+  const saveToDB = (closeModal: () => void) => {
+    console.log('save');
+    console.log(closeModal());
+  };
+
   return (
     <Stack
       component='main'
@@ -42,6 +44,7 @@ function App() {
         height: '100%',
         minHeight: '90vh',
       }}>
+      <DynamicForm />
       {/* <Stack direction='row' width='100%' height='100%'> */}
       {/* {isPending || isLoading ? (
           'Loading'
@@ -71,8 +74,22 @@ function App() {
             </div>
           </Stack>
         )} */}
-      <LoaderWrapper />
-      <DropApp />
+      {/* <CoolModal>
+        <Trigger asChild>
+          <Button variant='outlined'>Share</Button>
+        </Trigger>
+        <Content>
+          {(closeModal) => {
+            return (
+              <>
+                <Button onClick={() => saveToDB(closeModal)}>Save</Button>
+                <LoaderWrapper />
+              </>
+            );
+          }}
+        </Content>
+      </CoolModal>
+      <DropApp /> */}
       {/* <CompoundMenu>
         <Trigger>
           <Button>Menu</Button>
@@ -125,9 +142,9 @@ function App() {
           </CompoundMenu>
         </MenuContent>
       </CompoundMenu> */}
-      <ReactFlowProvider>
+      {/* <ReactFlowProvider>
         <Canvas />
-      </ReactFlowProvider>
+      </ReactFlowProvider> */}
       {/* <Editor /> */}
       {/* </Stack> */}
     </Stack>

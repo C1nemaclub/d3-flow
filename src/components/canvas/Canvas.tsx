@@ -63,7 +63,7 @@ const complexEdges: CustomEdgeType[] = [
     source: '3',
     target: '2',
     sourceHandle: 'true',
-    // animated: true,
+    animated: true,
   },
   {
     id: 'false',
@@ -71,14 +71,14 @@ const complexEdges: CustomEdgeType[] = [
     source: '3',
     target: '1',
     sourceHandle: 'false',
-    // animated: true,
+    animated: true,
   },
   {
     id: 'start',
     type: 'customEdge',
     source: '4',
     target: '3',
-    // animated: true,
+    animated: true,
   },
 ];
 const Canvas = () => {
