@@ -1,7 +1,29 @@
+import type { FC } from 'react';
 import ListBranch from './ListBranch';
 import SingleBranch from './SingleBranch';
+import type {
+  BaseInputProps,
+  DataType,
+  DynamicInputProps,
+} from './types/types';
 
-const FieldBranch = ({
+interface FieldBranchProps {
+  actionProps: BaseInputProps;
+  activeType: DataType;
+  formPath: string;
+  actionPath: string;
+  renderField: ({
+    value,
+    onChange,
+    index,
+  }: {
+    value: DynamicInputProps['value'];
+    onChange: (value: DynamicInputProps['value']) => void;
+    index?: boolean;
+  }) => void;
+}
+
+const FieldBranch: FC<FieldBranchProps> = ({
   actionProps,
   formPath,
   renderField,

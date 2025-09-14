@@ -1,4 +1,10 @@
-import { Button, Stack, TextField, Typography } from '@mui/material';
+import {
+  Autocomplete,
+  Button,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { FormProvider, get, useForm } from 'react-hook-form';
 import { Fragment } from 'react/jsx-runtime';
@@ -7,15 +13,22 @@ import FieldBranch from './FieldBranch';
 import FieldWrapper from './FieldWrapper';
 import OriginSelector from './OriginSelector';
 import { inputs, inputsToForm } from './types/constants';
+import type {
+  ActionInputs,
+  BaseInputProps,
+  DateInput,
+  DynamicFormValues,
+  DynamicInputProps,
+} from './types/types';
 const DynamicForm = () => {
-  const form = useForm({
+  const form = useForm<DynamicFormValues>({
     defaultValues: inputsToForm(inputs),
     mode: 'onChange',
   });
 
   const values = form.getValues();
 
-  const handleNewOrigin = (newOrigin, formPath) => {
+  const handleNewOrigin = (newOrigin: 'fixed' | 'output', formPath: string) => {
     if (newOrigin !== 'fixed') {
       form.setValue(`${formPath}.origin`, newOrigin);
       form.setValue(`${formPath}.value`, '');
@@ -25,7 +38,10 @@ const DynamicForm = () => {
     // form.setValue(`${formPath}.value`, newValue);
   };
 
-  const getActionProps = (action, path) => {
+  const getActionProps = (action: ActionInputs, path: string) => {
+    const otherpath = path.split('.').join('.dataTypes.0.keys.');
+    console.log(otherpath);
+
     const result = get(action, path.split('.').join('.dataTypes.0.keys.'));
     if (!result) {
       console.log('Si me viste F ❌❌❌❌');
@@ -40,26 +56,22 @@ const DynamicForm = () => {
     formPath: string;
     actionPath: string;
   }) => {
-    const formProps = get(values, formPath);
-    const actionProps = getActionProps(inputs, actionPath);
+    const formProps: DynamicInputProps | undefined = get(values, formPath);
+    const actionProps: BaseInputProps = getActionProps(inputs, actionPath);
 
     if (!formProps) {
-      console.log(formPath);
-      console.log(values);
-      console.log('Si me viste F 👽👽👽👽');
-      return `No formProps found Path: ${formProps}`;
+      return `No formProps found Path: ${formPath}`;
     }
     if (!actionProps) {
-      // console.log(inputs);
-      // console.log(actionPath);
-      // console.log(actionProps);
-      console.log('Si me viste F 👻👻👻👻');
       return `No actionProps found Path: ${actionPath}`;
     }
 
     const activeType = actionProps.dataTypes.find(
       (t) => t.type === formProps.type
     );
+    if (!activeType) {
+      return `No active type found for ${formPath}`;
+    }
 
     const isFlexible = formProps.origin !== 'fixed';
 
@@ -71,27 +83,54 @@ const DynamicForm = () => {
             <OriginSelector
               value={formProps.origin}
               origin={actionProps.origin}
-              onNewOrigin={(newOrigin) => handleNewOrigin(newOrigin, formPath)}
+              onNewOrigin={(newOrigin: 'fixed' | 'output') =>
+                handleNewOrigin(newOrigin, formPath)
+              }
             />
           }>
           <AdaptableField />
         </FieldWrapper>
       );
 
+    console.log(actionProps.dataTypes);
+
     switch (formProps.type) {
       case 'integer':
       case 'text':
         return (
           <FieldWrapper
-            label={actionProps.label}
+            label={`${actionProps.label} - ${activeType.type}`}
             endAdornment={
-              <OriginSelector
-                value={formProps.origin}
-                origin={actionProps.origin}
-                onNewOrigin={(newOrigin) =>
-                  handleNewOrigin(newOrigin, formPath)
-                }
-              />
+              <Stack
+                direction='row'
+                alignItems='center'
+                gap={1}
+                sx={{
+                  width: '100%',
+                  maxWidth: 500,
+                }}>
+                <Autocomplete
+                  disableClearable
+                  options={actionProps.dataTypes}
+                  value={activeType}
+                  getOptionLabel={(opt) => opt.type}
+                  fullWidth
+                  onChange={(_, v) => {
+                    console.log(v);
+                    form.setValue(`${formPath}.type`, v.type);
+                  }}
+                  renderInput={(params) => (
+                    <TextField {...params} size='small' />
+                  )}
+                />
+                <OriginSelector
+                  value={formProps.origin}
+                  origin={actionProps.origin}
+                  onNewOrigin={(newOrigin: 'fixed' | 'output') =>
+                    handleNewOrigin(newOrigin, formPath)
+                  }
+                />
+              </Stack>
             }>
             <FieldBranch
               actionPath={actionPath}
@@ -116,13 +155,36 @@ const DynamicForm = () => {
           <FieldWrapper
             label={actionProps.label}
             endAdornment={
-              <OriginSelector
-                value={formProps.origin}
-                origin={actionProps.origin}
-                onNewOrigin={(newOrigin) =>
-                  handleNewOrigin(newOrigin, formPath)
-                }
-              />
+              <Stack
+                direction='row'
+                alignItems='center'
+                gap={1}
+                sx={{
+                  width: '100%',
+                  maxWidth: 500,
+                }}>
+                <Autocomplete
+                  disableClearable
+                  options={actionProps.dataTypes}
+                  value={activeType}
+                  getOptionLabel={(opt) => opt.type}
+                  fullWidth
+                  onChange={(_, v) => {
+                    console.log(v);
+                    form.setValue(`${formPath}.type`, v.type);
+                  }}
+                  renderInput={(params) => (
+                    <TextField {...params} size='small' />
+                  )}
+                />
+                <OriginSelector
+                  value={formProps.origin}
+                  origin={actionProps.origin}
+                  onNewOrigin={(newOrigin: 'fixed' | 'output') =>
+                    handleNewOrigin(newOrigin, formPath)
+                  }
+                />
+              </Stack>
             }>
             <FieldBranch
               actionPath={actionPath}
@@ -132,7 +194,7 @@ const DynamicForm = () => {
               renderField={({ value, onChange }) => {
                 return (
                   <DatePicker
-                    value={value}
+                    value={value as DateInput['value']}
                     onChange={(newValue) => onChange(newValue)}
                     slotProps={{
                       textField: {
@@ -162,7 +224,7 @@ const DynamicForm = () => {
               <OriginSelector
                 value={formProps.origin}
                 origin={actionProps.origin}
-                onNewOrigin={(newOrigin) => {
+                onNewOrigin={(newOrigin: 'fixed' | 'output') => {
                   handleNewOrigin(newOrigin, formPath);
                 }}
               />
@@ -202,7 +264,7 @@ const DynamicForm = () => {
     }
   };
 
-  const onSubmit = (values) => {
+  const onSubmit = (values: DynamicFormValues) => {
     console.log(values);
   };
 

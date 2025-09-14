@@ -31,7 +31,7 @@ const ListBranch = ({ actionProps, formPath, renderField, actionPath }) => {
         return;
       }
     }
-    append({ id: crypto.randomUUID(), value: null, origin: 'fixed' });
+    append({ id: crypto.randomUUID(), value: '', origin: 'fixed' });
   };
 
   // const handleNewOrigin = (newOrigin, formPath) => {
