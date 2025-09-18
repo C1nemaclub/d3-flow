@@ -17,7 +17,7 @@ export const inputs: ActionInputs = {
         type: 'text',
       },
       {
-        isList: false,
+        isList: true,
         type: 'integer',
       },
     ],
@@ -48,92 +48,86 @@ export const inputs: ActionInputs = {
   //     },
   //   ],
   // },
-  // user_data: {
-  //   label: 'User Data',
-  //   origin: { fixed: true, output: true, variable: true },
-  //   required: true,
-  //   dataTypes: [
-  //     {
-  //       isList: true,
-  //       type: 'json',
-  //       keys: {
-  //         first_name: {
-  //           label: 'First Name',
-  //           origin: { fixed: true, output: true, variable: true },
-  //           required: true,
-  //           dataTypes: [
-  //             {
-  //               type: 'text',
-  //               isList: false,
-  //             },
-  //           ],
-  //         },
-  //         role: {
-  //           label: 'Role',
-  //           origin: { fixed: true, output: true, variable: true },
-  //           required: true,
-  //           dataTypes: [
-  //             {
-  //               type: 'text',
-  //               isList: false,
-  //             },
-  //           ],
-  //         },
-  //         address: {
-  //           label: 'Address',
-  //           origin: { fixed: true, output: true, variable: true },
-  //           required: true,
-  //           dataTypes: [
-  //             {
-  //               isList: false,
-  //               type: 'json',
-  //               keys: {
-  //                 primary: {
-  //                   label: 'Primary',
-  //                   origin: { fixed: true, output: true, variable: true },
-  //                   required: true,
-  //                   dataTypes: [
-  //                     {
-  //                       type: 'text',
-  //                       isList: false,
-  //                     },
-  //                   ],
-  //                 },
-  //                 secondary: {
-  //                   label: 'Secondary',
-  //                   origin: { fixed: true, output: true, variable: true },
-  //                   required: true,
-  //                   dataTypes: [
-  //                     {
-  //                       type: 'text',
-  //                       isList: false,
-  //                     },
-  //                   ],
-  //                 },
-  //               },
-  //             },
-  //           ],
-  //         },
-  //       },
-  //     },
-  //   ],
-  // },
+  user_data: {
+    label: 'User Data',
+    origin: { fixed: true, output: true, variable: true },
+    required: true,
+    dataTypes: [
+      {
+        isList: false,
+        type: 'text',
+      },
+      {
+        isList: false,
+        type: 'json',
+        keys: {
+          first_name: {
+            label: 'First Name',
+            origin: { fixed: true, output: true, variable: true },
+            required: true,
+            dataTypes: [
+              {
+                type: 'text',
+                isList: false,
+              },
+            ],
+          },
+          role: {
+            label: 'Role',
+            origin: { fixed: true, output: true, variable: true },
+            required: true,
+            dataTypes: [
+              {
+                type: 'text',
+                isList: false,
+              },
+            ],
+          },
+          address: {
+            label: 'Address',
+            origin: { fixed: true, output: true, variable: true },
+            required: true,
+            dataTypes: [
+              {
+                isList: false,
+                type: 'json',
+                keys: {
+                  primary: {
+                    label: 'Primary',
+                    origin: { fixed: true, output: true, variable: true },
+                    required: true,
+                    dataTypes: [
+                      {
+                        type: 'text',
+                        isList: false,
+                      },
+                    ],
+                  },
+                  secondary: {
+                    label: 'Secondary',
+                    origin: { fixed: true, output: true, variable: true },
+                    required: true,
+                    dataTypes: [
+                      {
+                        type: 'text',
+                        isList: false,
+                      },
+                    ],
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    ],
+  },
 };
 
 export const getInitialDatatype = (params: BaseInputProps) => {
   const firstDataType = params.dataTypes[0];
   if (firstDataType) return firstDataType;
   return null;
-};
-
-const TypeDefaultProps: Record<
-  'text' | 'integer' | 'json' | 'date',
-  string | null | {}
-> = {
-  text: '',
-  integer: null,
-  date: null,
-  json: {},
 };
 
 export const getInitialProps = (props: DataType): DynamicInputProps => {

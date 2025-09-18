@@ -19,6 +19,8 @@ import type {
   DateInput,
   DynamicFormValues,
   DynamicInputProps,
+  NumberInput,
+  TextInput,
 } from './types/types';
 const DynamicForm = () => {
   const form = useForm<DynamicFormValues>({
@@ -39,9 +41,6 @@ const DynamicForm = () => {
   };
 
   const getActionProps = (action: ActionInputs, path: string) => {
-    const otherpath = path.split('.').join('.dataTypes.0.keys.');
-    console.log(otherpath);
-
     const result = get(action, path.split('.').join('.dataTypes.0.keys.'));
     if (!result) {
       console.log('Si me viste F ❌❌❌❌');
@@ -49,12 +48,26 @@ const DynamicForm = () => {
     return result;
   };
 
+  const getInputRegularProps = (
+    action: ActionInputs,
+    path: string,
+    index = 0
+  ) => {
+    const result = get(
+      action,
+      path.split('.').join(`.dataTypes.${index}.keys.`)
+    );
+    return result;
+  };
+
   const renderField = ({
     formPath,
     actionPath,
+    typeIndex = 0,
   }: {
     formPath: string;
     actionPath: string;
+    typeIndex: number;
   }) => {
     const formProps: DynamicInputProps | undefined = get(values, formPath);
     const actionProps: BaseInputProps = getActionProps(inputs, actionPath);
@@ -62,10 +75,20 @@ const DynamicForm = () => {
     if (!formProps) {
       return `No formProps found Path: ${formPath}`;
     }
+    const actionPropsx: BaseInputProps = getInputRegularProps(
+      inputs,
+      actionPath,
+      typeIndex
+    );
+    // console.log(actionPropsx, 'hello world!');
+
     if (!actionProps) {
       return `No actionProps found Path: ${actionPath}`;
     }
 
+    const dataTypeIndex = actionProps.dataTypes.findIndex(
+      (dataType) => dataType.type === formProps.type
+    );
     const activeType = actionProps.dataTypes.find(
       (t) => t.type === formProps.type
     );
@@ -92,7 +115,7 @@ const DynamicForm = () => {
         </FieldWrapper>
       );
 
-    console.log(actionProps.dataTypes);
+    // console.log(actionProps.dataTypes);
 
     switch (formProps.type) {
       case 'integer':
@@ -132,7 +155,7 @@ const DynamicForm = () => {
                 />
               </Stack>
             }>
-            <FieldBranch
+            <FieldBranch<TextInput | NumberInput>
               actionPath={actionPath}
               activeType={activeType}
               formPath={formPath}
@@ -186,7 +209,7 @@ const DynamicForm = () => {
                 />
               </Stack>
             }>
-            <FieldBranch
+            <FieldBranch<DateInput>
               actionPath={actionPath}
               activeType={activeType}
               formPath={formPath}
@@ -194,7 +217,7 @@ const DynamicForm = () => {
               renderField={({ value, onChange }) => {
                 return (
                   <DatePicker
-                    value={value as DateInput['value']}
+                    value={value}
                     onChange={(newValue) => onChange(newValue)}
                     slotProps={{
                       textField: {
@@ -209,7 +232,10 @@ const DynamicForm = () => {
           </FieldWrapper>
         );
       case 'json': {
-        const firstDt = actionProps.dataTypes[0].keys;
+        console.log(typeIndex);
+
+        const firstDt = actionProps.dataTypes[typeIndex].keys;
+
         const nestedInputs = inputsToForm(firstDt);
         return (
           <Stack component='fieldset'>
@@ -249,6 +275,7 @@ const DynamicForm = () => {
                               ? `${formPath}.value.${index}.value.${key}`
                               : `${formPath}.value.${key}`,
                           actionPath: `${actionPath}.${key}`,
+                          typeIndex: dataTypeIndex,
                         })}
                       </Fragment>
                     );

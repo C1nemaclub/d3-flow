@@ -1,4 +1,3 @@
-import type { FC } from 'react';
 import ListBranch from './ListBranch';
 import SingleBranch from './SingleBranch';
 import type {
@@ -7,7 +6,7 @@ import type {
   DynamicInputProps,
 } from './types/types';
 
-interface FieldBranchProps {
+interface FieldBranchProps<T extends DynamicInputProps> {
   actionProps: BaseInputProps;
   activeType: DataType;
   formPath: string;
@@ -17,19 +16,19 @@ interface FieldBranchProps {
     onChange,
     index,
   }: {
-    value: DynamicInputProps['value'];
-    onChange: (value: DynamicInputProps['value']) => void;
+    value: T['value'];
+    onChange: (value: T['value']) => void;
     index?: boolean;
   }) => void;
 }
 
-const FieldBranch: FC<FieldBranchProps> = ({
+const FieldBranch = <T extends DynamicInputProps>({
   actionProps,
   formPath,
   renderField,
   activeType,
   actionPath,
-}) => {
+}: FieldBranchProps<T>) => {
   const { isList } = activeType;
 
   if (isList) {
