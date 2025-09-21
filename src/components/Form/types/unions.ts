@@ -8,59 +8,83 @@ const typeValueBase = z.object({
   isList: z.literal(false),
 });
 
-const fixedValueSchema = z.discriminatedUnion('type', [
-  typeValueBase.extend({
-    value: textSchema,
-    type: z.literal('text'),
-  }),
-  typeValueBase.extend({
-    value: numberSchema,
-    type: z.literal('number'),
-  }),
-]);
+const arrayInternalValueBase = z.object({
+  origin: z.literal('fixed'),
+  id: z.string(),
+});
+
+const createUnionForFixedValues = (base: z.AnyZodObject) => {
+  return z.discriminatedUnion('type', [
+    base.extend({
+      value: textSchema,
+      type: z.literal('text'),
+    }),
+    base.extend({
+      value: numberSchema,
+      type: z.literal('number'),
+    }),
+  ]);
+};
+
+const fixedValueSchema = createUnionForFixedValues(typeValueBase);
+const arrayIntervalValuesFixedValueSchema = createUnionForFixedValues(
+  arrayInternalValueBase
+);
 
 const outputValueSchema = z.object({
   value: z.string(),
   type: z.enum(['text', 'number']),
   origin: z.literal('output'),
-  isList: z.literal(false),
+  isList: z.boolean(),
+});
+
+const outputValueSchemaArray = z.object({
+  value: z.string(),
+  type: z.enum(['text', 'number']),
+  origin: z.literal('output'),
+  id: z.string(),
 });
 
 const fixedOutputUnion = z.union([fixedValueSchema, outputValueSchema]);
+const arrayFixedOutputUnion = z.union([
+  arrayIntervalValuesFixedValueSchema,
+  outputValueSchemaArray,
+]);
 
 const arraySchema = z.object({
   type: z.enum(['text', 'number']),
   origin: z.literal('fixed'),
   isList: z.literal(true),
-  value: z.array(fixedOutputUnion),
+  value: z.array(arrayFixedOutputUnion),
 });
 
 const schema = z.union([arraySchema, fixedOutputUnion]);
 
 try {
   schema.parse({
-    type: 'number',
-    value: [
-      {
-        origin: 'fixed',
-        value: '123',
-        type: 'text',
-        isList: false,
-      },
-      {
-        origin: 'fixed',
-        value: 123,
-        type: 'number',
-        isList: false,
-      },
-      {
-        origin: 'output',
-        value: '123',
-        type: 'number',
-        isList: false,
-      },
-    ],
-    origin: 'fixed',
+    // value: [
+    //   {
+    //     origin: 'fixed',
+    //     value: '123',
+    //     type: 'text',
+    //     id: '1',
+    //   },
+    //   {
+    //     origin: 'fixed',
+    //     value: 123,
+    //     type: 'number',
+    //     id: '2',
+    //   },
+    //   {
+    //     origin: 'output',
+    //     value: '123',
+    //     type: 'number',
+    //     id: '3',
+    //   },
+    // ],
+    value: '123',
+    type: 'text',
+    origin: 'output',
     isList: true,
   });
   console.log('valid');
