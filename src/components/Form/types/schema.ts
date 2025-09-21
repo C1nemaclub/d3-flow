@@ -39,7 +39,8 @@ const getSchema = (inputs?: ActionInputs) => {
     z.object({
       isList: z.literal(true),
       type: z.string(),
-      value: z.array(arrayItemSchema),
+      // value: z.array(arrayItemSchema),
+      value: z.array(itemValueUnion),
       origin: z.string(),
     }),
   ]);
@@ -77,17 +78,17 @@ try {
   // });
   smh.parse({
     type: 'number',
-    // value: [
-    //   {
-    //     id: ' 123',
-    //     value: '123',
-    //     type: 'text',
-    //     origin: 'fixed',
-    //   },
-    // ],
-    value: 123,
-    isList: false,
-    origin: 'output',
+    value: [
+      {
+        type: 'number',
+        origin: 'fixed',
+        value: 123,
+        isList: false,
+      },
+    ],
+    // value: 123,
+    isList: true,
+    origin: 'fixed',
   });
   console.log('Valid');
 } catch (e) {
@@ -95,3 +96,6 @@ try {
     console.log(e.message);
   }
 }
+
+
+
