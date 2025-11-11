@@ -20,6 +20,7 @@ import Header from './nodes/components/Header';
 import Sidebar from './nodes/components/Sidebar';
 import { useSettingsStore } from './store/useNodesStore';
 import type { CustomEdgeType, NodeType } from './types/nodes.types';
+import { nodeBuilder } from './utils/builder';
 import { edgeTypes, nodeTypes } from './utils/nodes';
 
 const complexNodes: NodeType[] = [
@@ -134,6 +135,34 @@ const Canvas = () => {
     },
     [reactFlowInstance]
   );
+
+  const doStuff = () => {
+    const builder = nodeBuilder(nodes);
+    const updatedNodes = builder
+      .add({
+        type: 'ghostNode',
+        id: 'built',
+        position: {
+          x: 0,
+          y: 0,
+        },
+        data: {
+          label: '',
+        },
+      })
+      .add({
+        type: 'ghostNode',
+        id: 'built2',
+        position: {
+          x: 0,
+          y: 0,
+        },
+        data: {
+          label: '',
+        },
+      })
+      .get();
+  };
 
   const ui = () => {
     return (

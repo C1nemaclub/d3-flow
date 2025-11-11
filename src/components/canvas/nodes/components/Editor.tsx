@@ -1,9 +1,6 @@
 import { Box, IconButton, styled } from '@mui/material';
 import { IconSettings } from '@tabler/icons-react';
-import Document from '@tiptap/extension-document';
 import Mention from '@tiptap/extension-mention';
-import Paragraph from '@tiptap/extension-paragraph';
-import Text from '@tiptap/extension-text';
 import {
   EditorContent,
   mergeAttributes,
@@ -13,6 +10,7 @@ import {
   useEditor,
   type ReactNodeViewProps,
 } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
 import clsx from 'clsx';
 import MentionComponent from './editor-comps/MentionComponent';
 import { suggestion } from './editor-comps/suggestion';
@@ -82,7 +80,7 @@ const VenomInjectedMentionComponent = (
   return <MentionComponent {...props} {...extraProps} />;
 };
 
-const CustomMention = Mention.extend({
+export const CustomMention = Mention.extend({
   addNodeView() {
     return ReactNodeViewRenderer(VenomInjectedMentionComponent);
   },
@@ -131,10 +129,10 @@ const CustomEditor = styled(EditorContent, {
           border: `1px solid ${theme.palette.primary.main}`,
         },
       },
-      '& .mention': {
-        backgroundColor: 'rgba(182, 147, 253, 0.1)',
-        color: '#5800cc',
-      },
+      // '& .mention': {
+      //   backgroundColor: 'rgba(182, 147, 253, 0.1)',
+      //   color: '#5800cc',
+      // },
     },
     variant === 'outlined' && {
       '& .tiptap.ProseMirror': {
@@ -147,10 +145,11 @@ const CustomEditor = styled(EditorContent, {
 const Editor = () => {
   const editor = useEditor({
     extensions: [
+      StarterKit,
       PopupExtension.configure({}),
-      Document,
-      Paragraph,
-      Text,
+      // Document,
+      // Paragraph,
+      // Text,
       CustomMention.configure({
         deleteTriggerWithBackspace: false,
         HTMLAttributes: {
@@ -173,6 +172,9 @@ const Editor = () => {
     ],
     parseOptions: {
       preserveWhitespace: 'full',
+    },
+    onUpdate: ({ editor }) => {
+      console.log(editor.getHTML());
     },
     content: '<div data-id="my-block">Editable block with popup</div>',
     // editorProps: {

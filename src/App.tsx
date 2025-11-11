@@ -1,6 +1,7 @@
 import { Stack } from '@mui/material';
 import './App.css';
-import DynamicForm from './components/Form/DynamicForm';
+import Editor from './components/canvas/nodes/components/Editor';
+import { reactResult } from './components/canvas/nodes/components/serialize';
 
 function App() {
   // const { isPending, isLoading, error, data } = useQuery<User[]>({
@@ -43,8 +44,18 @@ function App() {
         alignItems: 'center',
         height: '100%',
         minHeight: '90vh',
+        border: '1px solid red',
       }}>
-      <DynamicForm />
+      {/* <ManualQuery /> */}
+      <Editor />
+      <Stack
+        sx={{
+          width: '100%',
+          alignItems: 'start',
+        }}>
+        {reactResult}
+      </Stack>
+      {/* <DynamicForm /> */}
       {/* <CustomPopover>
         <PopoverTrigger asChild>
           <Button variant='contained' size='small'>
@@ -161,6 +172,7 @@ function App() {
       </ReactFlowProvider> */}
       {/* <Editor /> */}
       {/* </Stack> */}
+      {/* <Canvas /> */}
     </Stack>
   );
 }
