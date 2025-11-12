@@ -142,7 +142,7 @@ const CustomEditor = styled(EditorContent, {
   ];
 });
 
-const Editor = () => {
+const Editor = ({ readonly }) => {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -176,7 +176,8 @@ const Editor = () => {
     onUpdate: ({ editor }) => {
       console.log(editor.getHTML());
     },
-    content: '<div data-id="my-block">Editable block with popup</div>',
+    content:
+      '<h3>Title</h3><h3>Another title</h3><ol><li><p>First</p></li><li><p>Second</p></li></ol><p>Text</p><h1>hello</h1><p></p>',
     // editorProps: {
     //   attributes: {
     //     class: ['custom-editor'].join(' '),
@@ -189,6 +190,20 @@ const Editor = () => {
     'editor-focused': editor.isFocused,
     'editor-outlined': true,
   });
+
+  if (readonly) {
+    return (
+      <EditorContent
+        editor={editor}
+        placeholder='Type something'
+        style={{
+          width: '100%',
+          textAlign: 'left',
+          lineHeight: '1rem',
+        }}
+      />
+    );
+  }
 
   return (
     <CustomEditor

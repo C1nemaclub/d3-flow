@@ -47,14 +47,17 @@ function App() {
         border: '1px solid red',
       }}>
       {/* <ManualQuery /> */}
-      <Editor />
-      <Stack
-        sx={{
+      <Editor readonly={false} />
+      <Editor readonly={true} />
+      <div
+        className='ProseMirror'
+        style={{
           width: '100%',
-          alignItems: 'start',
+          textAlign: 'left',
+          lineHeight: '1rem',
         }}>
         {reactResult}
-      </Stack>
+      </div>
       {/* <DynamicForm /> */}
       {/* <CustomPopover>
         <PopoverTrigger asChild>
